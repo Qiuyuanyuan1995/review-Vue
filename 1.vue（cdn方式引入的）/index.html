@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue.js</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://unpkg.com/vue"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+</head>
+
+<body>
+    <!-- vue-app是根容器 -->
+    <div id="vue-app">
+        <h1>{{name}}：{{job}}</h1>
+        <!-- 在标签里可以data里面的属性也可以拿data里面的方法 -->
+        <p> {{say('better')}} </p>
+        <a :href="website">跳转到百度首页</a>
+        <input type="text" :value="job" style="border:1px solid red">
+        <p v-html="websiteTag"> </p>
+        <br>
+        <br>
+        <h1>Events事件的操作</h1>
+        <!-- 单击事件 -->
+        <button @click="ageAdd(1)">单击增加长一岁</button>
+        <button @click="ageSub(1)">单击增加减一岁</button>
+        <button @click="test">测试click事件的event</button>
+        <!-- 双击事件 -->
+        <button @dblclick="ageAdd(10)">双击增加长10岁</button>
+        <button @dblclick="ageSub(10)">双击减少减10岁</button>
+        <p>my age is {{age}}</p>
+        <!-- 鼠标事件 -->
+        <div id="canvas" @mousemove='updateXY'>
+            <!-- 原生js阻止冒泡事件 -->
+            <!-- {{x}},{{y}} ——<span @mousemove="stopMoving">Stop Moving</span> -->
+            <!--vue的事件修饰符，阻止冒泡事件  -->
+            {{x}},{{y}} ——<span @mousemove.stop="">Stop Moving</span>
+        </div>
+        <br><br>
+        <!-- 事件修饰符 -->
+        <!-- 弹出alert不进行页面跳转 -->
+        <a href="https://www.taobao.com/" @click.prevent="alert()">默认阻止事件</a>
+        <br><br>
+        <!-- 鼠标的键盘事件 -->
+        <h1>键盘事件</h1>
+        <label>姓名：</label>
+        <!-- <input type="text" v-on:keyup="logName" v-model='Name'> -->
+        <label>年龄</label>
+        <input type="text" @keyup="logAge">
+        <!-- 双向数据绑定 input/select/textarear 
+             双向数据绑定:两种方式 
+             1.ref方式
+             2.v-model方式
+        -->
+        <h1>双向数据绑定 input/select/textarear</h1>
+        <label>姓名：</label>
+        <!-- <input ref="lgName" type="text" v-on:keyup="logName" v-model="Name"> -->
+        <input ref="lgName" type="text" v-model="Name">
+        <span>{{Name}}</span>
+        <label>年龄</label>
+        <!-- <input ref="lgAge" type="text" @keyup="logAge" v-model="Age"> -->
+        <input ref="lgAge" type="text" v-model="Age">
+        <span>{{Age}}</span>
+        <br><br>
+        <!-- 计算属性 -->
+        <h1>Computed计算属性</h1>
+        <button @click="a++">Add to A</button>
+        <button @click="b++">Add to B</button>
+        <p>A - {{a}}</p>
+        <p>B - {{b}}</p>
+        <!-- 调用方法应该加（），addToA() -->
+        <!-- <p>Age + A = {{addToA()}}</p>
+        <p>Age + B = {{addToB()}}</p> -->
+        <!-- 调用computed的方法应该把（） 去掉-->
+        <p>Age + A = {{addToA}}</p>
+        <p>Age + B = {{addToB}}</p>
+        <br>
+        <!-- 动态绑定css样式 -->
+        <h1>动态 css 样式</h1>
+        <h2 :class="{red:true,large:true}">示例1</h2>
+        <!-- v-on:class="{changeColor:changeColor}
+            第一个changeColor是代表css中的chengeColor,样式,
+            第二个changeColor是app.js中的changeColorr：false，布尔值控制显隐
+         -->
+        <!-- @click="changeColorr = !changeColorr"这里的2个changeColorr是app.js里的data属性里的changeColor -->
+        <!-- <div :class="{changeColor:changeColorr}" @click="changeColorr = !changeColorr">
+             <span>Henry</span>
+         </div>    -->
+        <h2>示例2</h2>
+        <button @click="changeColorr = !changeColorr">Change Color</button>
+        <button @click="changeLength = !changeLength">Change Length</button>
+        <!-- 通过计算属性computed的compareClass()方法来实现类名的动态绑定 -->
+        <div :class="compareClass">
+            <span>lucy</span>
+        </div>
+        <br>
+        <!-- v-if的条件渲染 -->
+        <h1>v-if 条件渲染</h1>
+        <button @click="error = !error">Toggle Error</button>
+        <button @click="success = !success">Toggle Success</button>
+        <!-- v-if的dom结构会消失，不存在，不会占用 -->
+        <!-- 先判断v-if="error"的值是否为真，如果为真则显示，
+            如果为假则判断v-if-else="success"的值是否为真，
+            为真则显示，为假则二者都不显示 -->
+         <!-- <p v-if="error">网络连接错误：404</p>
+         <p v-else-if="success">网络连接成功:200</p> -->
+         <!-- v-show的dom结构不会消失，只是display:none了 -->
+         <p v-show="error">网络连接错误：404</p>
+         <p v-show="success">网络连接成功:200</p>
+         <!-- v-for循环 -->
+         <!-- 数组下标获取方式 -->
+         {{characters[0]}}
+         {{characters[1]}}
+         {{characters[2]}}
+         <!-- 数组遍历方式 -->
+         <ul>
+             <li v-for="item in characters">
+                 {{item}}
+             </li>
+         </ul>
+         <!-- 遍历对象 -->
+         <ul>
+             <li v-for="(list,index) in users">
+                {{index+1}}: {{list.name}}-{{list.age}}
+             </li>
+         </ul>
+         <!-- 也可以用template渲染 -->
+         <!-- <template v-for="(list,index) in users">
+               <h3>{{index}}.{{list.name}}</h3>
+               <p>年龄:{{list.age}}</p>  
+         </template> -->
+         <!-- 循环每条对象进行列表展示 -->
+         <template v-for="(list,index) in users">
+             <div v-for="(val,key) in list">
+                  {{key}}:{{val}}
+             </div>
+      </template>
+    </div>
+    <script src="./app.js"></script>
+</body>
+
+</html>
